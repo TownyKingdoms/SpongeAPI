@@ -25,6 +25,7 @@
 package org.spongepowered.api.entity.living.player;
 
 import org.spongepowered.api.Server;
+import org.spongepowered.api.event.message.MessageChannelEvent;
 import org.spongepowered.api.world.Locatable;
 import org.spongepowered.api.command.source.RemoteSource;
 import org.spongepowered.api.data.key.Keys;
@@ -117,6 +118,14 @@ public interface Player extends Humanoid, User, Locatable, RemoteSource, Viewer,
      * @return True if colors are enabled in chat
      */
     boolean isChatColorsEnabled();
+
+    /**
+     * Simulates a chat message from a player.
+     *
+     * @param message The message to send
+     * @return The event thrown from the message
+     */
+    MessageChannelEvent.Chat chat(Text message);
 
     /**
      * Gets the skin parts that this player has allowed to render.
