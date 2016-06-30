@@ -36,6 +36,7 @@ import org.spongepowered.api.data.manipulator.mutable.TargetedLocationData;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.text.translation.Translatable;
+import org.spongepowered.api.util.AABB;
 import org.spongepowered.api.util.Identifiable;
 import org.spongepowered.api.util.RelativePositions;
 import org.spongepowered.api.world.Location;
@@ -304,6 +305,15 @@ public interface Entity extends Identifiable, DataHolder, DataSerializable, Tran
      * @return True if the teleport was successful
      */
     boolean transferToWorld(UUID uuid, Vector3d position);
+
+    /**
+     * Gets the entity's bounding box, usually for collisions and interaction.
+     * The box has an offset matching the entity's positions. That is to say,
+     * it is absolutely positioned and not relative to the entity.
+     *
+     * @return The axis aligned bounding box
+     */
+    Optional<AABB> getBoundingBox();
 
     /**
      * Gets the entity passenger that rides this entity, if available.
