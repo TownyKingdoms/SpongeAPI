@@ -36,6 +36,7 @@ import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.util.DiscreteTransform3;
 import org.spongepowered.api.util.Identifiable;
 import org.spongepowered.api.util.PositionOutOfBoundsException;
+import org.spongepowered.api.world.BlockChangeFlag;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.extent.worker.MutableBiomeAreaWorker;
 import org.spongepowered.api.world.extent.worker.MutableBlockVolumeWorker;
@@ -104,13 +105,13 @@ public interface Extent extends EntityUniverse, TileEntityVolume, InteractableVo
      *
      * @param position The position
      * @param block The block
-     * @param notifyNeighbors Whether or not you want to notify neighboring
+     * @param flag Whether or not you want to notify neighboring
      *        blocks of this change. If true, this may cause blocks to change.
      * @throws PositionOutOfBoundsException If the position is outside of the
      *         bounds of the volume
      */
-    default void setBlock(Vector3i position, BlockState block, boolean notifyNeighbors) {
-        setBlock(position.getX(), position.getY(), position.getZ(), block, notifyNeighbors);
+    default void setBlock(Vector3i position, BlockState block, BlockChangeFlag flag) {
+        setBlock(position.getX(), position.getY(), position.getZ(), block, flag);
     }
 
     /**
@@ -120,12 +121,12 @@ public interface Extent extends EntityUniverse, TileEntityVolume, InteractableVo
      * @param y The Y position
      * @param z The Z position
      * @param block The block
-     * @param notifyNeighbors Whether or not you want to notify neighboring
+     * @param flag Whether or not you want to notify neighboring
      *        blocks of this change. If true, this may cause blocks to change.
      * @throws PositionOutOfBoundsException If the position is outside of the
      *         bounds of the volume
      */
-    void setBlock(int x, int y, int z, BlockState block, boolean notifyNeighbors);
+    void setBlock(int x, int y, int z, BlockState block, BlockChangeFlag flag);
 
     /**
      * Sets the block at the given position in the world with the provided
@@ -137,14 +138,14 @@ public interface Extent extends EntityUniverse, TileEntityVolume, InteractableVo
      *
      * @param position The position
      * @param blockState The block
-     * @param notifyNeighbors Whether or not you want to notify neighboring
+     * @param flag Whether or not you want to notify neighboring
      *        blocks of this change. If true, this may cause blocks to change.
      * @param cause The cause to use
      * @throws PositionOutOfBoundsException If the position is outside of the
      *         bounds of the volume
      */
-    default void setBlock(Vector3i position, BlockState blockState, boolean notifyNeighbors, Cause cause) {
-        setBlock(position.getX(), position.getY(), position.getZ(), blockState, notifyNeighbors, cause);
+    default void setBlock(Vector3i position, BlockState blockState, BlockChangeFlag flag, Cause cause) {
+        setBlock(position.getX(), position.getY(), position.getZ(), blockState, flag, cause);
     }
 
     /**
@@ -159,13 +160,13 @@ public interface Extent extends EntityUniverse, TileEntityVolume, InteractableVo
      * @param y The Y position
      * @param z The Z position
      * @param blockState The block
-     * @param notifyNeighbors Whether or not you want to notify neighboring
+     * @param flag Whether or not you want to notify neighboring
      *        blocks of this change. If true, this may cause blocks to change.
      * @param cause The cause to use
      * @throws PositionOutOfBoundsException If the position is outside of the
      *         bounds of the volume
      */
-    void setBlock(int x, int y, int z, BlockState blockState, boolean notifyNeighbors, Cause cause);
+    void setBlock(int x, int y, int z, BlockState blockState, BlockChangeFlag flag, Cause cause);
 
     /**
      * Replace the block at this position by a new type.
@@ -174,13 +175,13 @@ public interface Extent extends EntityUniverse, TileEntityVolume, InteractableVo
      *
      * @param position The position of the block
      * @param type The new type
-     * @param notifyNeighbors Whether or not you want to notify neighboring
+     * @param flag Whether or not you want to notify neighboring
      *        blocks of this change. If true, this may cause blocks to change.
      * @throws PositionOutOfBoundsException If the position is outside of the
      *         bounds of the area
      */
-    default void setBlockType(Vector3i position, BlockType type, boolean notifyNeighbors) {
-        setBlockType(position.getX(), position.getY(), position.getZ(), type, notifyNeighbors);
+    default void setBlockType(Vector3i position, BlockType type, BlockChangeFlag flag) {
+        setBlockType(position.getX(), position.getY(), position.getZ(), type, flag);
     }
 
     /**
@@ -198,7 +199,24 @@ public interface Extent extends EntityUniverse, TileEntityVolume, InteractableVo
      *         bounds of the area
      */
     default void setBlockType(int x, int y, int z, BlockType type, boolean notifyNeighbors) {
-        setBlock(x, y, z, type.getDefaultState(), notifyNeighbors);
+        setBlockType(x, y, z, type, notifyNeighbors);
+    }
+    /**
+     * Replace the block at this position by a new type.
+     *
+     * <p>This will remove any extended block data at the given position.</p>
+     *
+     * @param x The X position
+     * @param y The Y position
+     * @param z The Z position
+     * @param type The new type
+     * @param flag Whether or not you want to notify neighboring
+     *        blocks. If true, this may cause blocks to change.
+     * @throws PositionOutOfBoundsException If the position is outside of the
+     *         bounds of the area
+     */
+    default void setBlockType(int x, int y, int z, BlockType type, BlockChangeFlag flag) {
+        setBlock(x, y, z, type.getDefaultState(), flag);
     }
 
     /**
@@ -211,14 +229,14 @@ public interface Extent extends EntityUniverse, TileEntityVolume, InteractableVo
      *
      * @param position The position
      * @param type The block type
-     * @param notifyNeighbors Whether or not you want to notify neighboring
+     * @param flag Whether or not you want to notify neighboring
      *        blocks of this change. If true, this may cause blocks to change.
      * @param cause The cause to use
      * @throws PositionOutOfBoundsException If the position is outside of the
      *         bounds of the volume
      */
-    default void setBlockType(Vector3i position, BlockType type, boolean notifyNeighbors, Cause cause) {
-        setBlock(position.getX(), position.getY(), position.getZ(), type.getDefaultState(), notifyNeighbors, cause);
+    default void setBlockType(Vector3i position, BlockType type, BlockChangeFlag flag, Cause cause) {
+        setBlock(position.getX(), position.getY(), position.getZ(), type.getDefaultState(), flag, cause);
     }
 
     /**
@@ -233,14 +251,14 @@ public interface Extent extends EntityUniverse, TileEntityVolume, InteractableVo
      * @param y The Y position
      * @param z The Z position
      * @param type The block
-     * @param notifyNeighbors Whether or not you want to notify neighboring
+     * @param flag Whether or not you want to notify neighboring
      *        blocks of this change. If true, this may cause blocks to change.
      * @param cause The cause to use
      * @throws PositionOutOfBoundsException If the position is outside of the
      *         bounds of the volume
      */
-    default void setBlockType(int x, int y, int z, BlockType type, boolean notifyNeighbors, Cause cause) {
-        setBlock(x, y, z, type.getDefaultState(), notifyNeighbors, cause);
+    default void setBlockType(int x, int y, int z, BlockType type, BlockChangeFlag flag, Cause cause) {
+        setBlock(x, y, z, type.getDefaultState(), flag, cause);
     }
 
     /**
@@ -282,11 +300,11 @@ public interface Extent extends EntityUniverse, TileEntityVolume, InteractableVo
      * @param snapshot The snapshot
      * @param force If true, forces block state to be set even if the
      *        {@link BlockType} does not match the snapshot one.
-     * @param notifyNeighbors Whether or not you want to notify neighboring
+     * @param flag Whether or not you want to notify neighboring
      *        blocks of this change. If true, this may cause blocks to change.
      * @return true if the restore was successful, false otherwise
      */
-    boolean restoreSnapshot(BlockSnapshot snapshot, boolean force, boolean notifyNeighbors);
+    boolean restoreSnapshot(BlockSnapshot snapshot, boolean force, BlockChangeFlag flag);
 
     /**
      * Restores the {@link BlockSnapshot} at the given position.
@@ -301,12 +319,12 @@ public interface Extent extends EntityUniverse, TileEntityVolume, InteractableVo
      * @param snapshot The snapshot
      * @param force If true, forces block state to be set even if the
      *        {@link BlockType} does not match the snapshot one.
-     * @param notifyNeighbors Whether or not you want to notify neighboring
+     * @param flag Whether or not you want to notify neighboring
      *        blocks of this change. If true, this may cause blocks to change.
      * @return true if the restore was successful, false otherwise
      */
-    default boolean restoreSnapshot(Vector3i position, BlockSnapshot snapshot, boolean force, boolean notifyNeighbors) {
-        return restoreSnapshot(position.getX(), position.getY(), position.getZ(), snapshot, force, notifyNeighbors);
+    default boolean restoreSnapshot(Vector3i position, BlockSnapshot snapshot, boolean force, BlockChangeFlag flag) {
+        return restoreSnapshot(position.getX(), position.getY(), position.getZ(), snapshot, force, flag);
     }
 
     /**
@@ -324,11 +342,11 @@ public interface Extent extends EntityUniverse, TileEntityVolume, InteractableVo
      * @param snapshot The snapshot
      * @param force If true, forces block state to be set even if the
      *        {@link BlockType} does not match the snapshot one.
-     * @param notifyNeighbors Whether or not you want to notify neighboring
+     * @param flag Whether or not you want to notify neighboring
      *        blocks of this change. If true, this may cause blocks to change.
      * @return true if the restore was successful, false otherwise
      */
-    boolean restoreSnapshot(int x, int y, int z, BlockSnapshot snapshot, boolean force, boolean notifyNeighbors);
+    boolean restoreSnapshot(int x, int y, int z, BlockSnapshot snapshot, boolean force, BlockChangeFlag flag);
 
     /**
      * Gets a list of {@link ScheduledBlockUpdate}s on this block.

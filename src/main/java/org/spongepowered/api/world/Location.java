@@ -528,11 +528,10 @@ public final class Location<E extends Extent> implements DataHolder {
      * <p>This will remove any extended block data at the given position.</p>
      *
      * @param state The new block state
-     * @param notifyNeighbors Whether or not you want to notify neighboring
-     * blocks of this change. If true, this may cause blocks to change.
+     * @param flag Whether or not you want to notify neighboring
      */
-    public void setBlock(BlockState state, boolean notifyNeighbors) {
-        getExtent().setBlock(getBlockPosition(), state, notifyNeighbors);
+    public void setBlock(BlockState state, BlockChangeFlag flag) {
+        getExtent().setBlock(getBlockPosition(), state, flag);
     }
 
     /**
@@ -550,13 +549,11 @@ public final class Location<E extends Extent> implements DataHolder {
      * Replace the block type at this position by a new type.
      *
      * <p>This will remove any extended block data at the given position.</p>
-     *
-     * @param type The new type
-     * @param notifyNeighbors Whether or not you want to notify neighboring
-     * blocks of this change. If true, this may cause blocks to change.
+     *  @param type The new type
+     * @param flag Whether or not you want to notify neighboring
      */
-    public void setBlockType(BlockType type, boolean notifyNeighbors) {
-        getExtent().setBlockType(getBlockPosition(), type, notifyNeighbors);
+    public void setBlockType(BlockType type, BlockChangeFlag flag) {
+        getExtent().setBlockType(getBlockPosition(), type, flag);
     }
 
     /**
@@ -564,15 +561,13 @@ public final class Location<E extends Extent> implements DataHolder {
      *
      * <p>Changing the snapshot afterwards will not affect the block that has
      * been placed at this location.</p>
-     *
-     * @param snapshot The snapshot
+     *  @param snapshot The snapshot
      * @param force If true, forces block state to be set even if the
      * {@link BlockType} does not match the snapshot one.
-     * @param notifyNeighbors Whether or not you want to notify neighboring
-     * blocks of this change. If true, this may cause blocks to change.
+     * @param flag Whether or not you want to notify neighboring
      */
-    public void restoreSnapshot(BlockSnapshot snapshot, boolean force, boolean notifyNeighbors) {
-        getExtent().restoreSnapshot(getBlockPosition(), snapshot, force, notifyNeighbors);
+    public void restoreSnapshot(BlockSnapshot snapshot, boolean force, BlockChangeFlag flag) {
+        getExtent().restoreSnapshot(getBlockPosition(), snapshot, force, flag);
     }
 
     /**
@@ -583,7 +578,7 @@ public final class Location<E extends Extent> implements DataHolder {
      */
     @SuppressWarnings("ConstantConditions")
     public void removeBlock() {
-        getExtent().setBlockType(getBlockPosition(), BlockTypes.AIR, true);
+        getExtent().setBlockType(getBlockPosition(), BlockTypes.AIR, BlockChangeFlag.ALL);
     }
 
     @Override
